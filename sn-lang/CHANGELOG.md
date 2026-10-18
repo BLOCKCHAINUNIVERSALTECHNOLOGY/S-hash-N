@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.0
+* **New models:** `PCA` (integer or explained-variance fraction, `inverse_transform`; eigenvectors by Jacobi rotations, checked against NumPy),
+  `NaiveBayes` (Gaussian), and `GradientBoosting` (regression and multi-class classification, optional `subsample`).
+  All support `save` / `load_model`.
+* Example `17_more_models.sn`, 14 new tests (178 in total).
+
 ## 1.2.1
 * **About 2.5x faster interpreter.** The evaluator now compiles each AST node once into a Python closure instead of
   dispatching on node types at run time. Statements return a status code instead of raising exceptions for

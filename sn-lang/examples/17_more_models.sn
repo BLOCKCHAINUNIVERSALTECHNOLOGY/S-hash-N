@@ -1,0 +1,27 @@
+# PCA, naive Bayes and gradient boosting
+let iris = read_csv("examples/data/iris.csv")
+let X = iris.select("sepal_length", "sepal_width", "petal_length", "petal_width")
+let y = iris["species"]
+
+# PCA: squeeze 4 measurements into 2 numbers
+let pca = PCA(n_components=2).fit(X)
+print("variance explained:", pca.explained_variance_ratio.round(3))
+let Z = pca.transform(X)
+print("reduced shape:", shape(Z))
+print("how much is kept (reconstruction error):", round(mse(X.to_tensor(), pca.inverse_transform(Z)), 4))
+
+# Classify in the 2-D space and in the full space
+let [Xtr, Xte, ytr, yte] = train_test_split(X, y, test_size=0.3, seed=11)
+let nb = NaiveBayes().fit(Xtr, ytr)
+print("\nnaive Bayes accuracy:", round(nb.score(Xte, yte), 3))
+print("class probabilities for one flower:", nb.predict_proba([[5.9, 3.0, 5.1, 1.8]]).round(3))
+
+let gb = GradientBoosting(n_trees=60, lr=0.2, max_depth=2, seed=1).fit(Xtr, ytr)
+print("gradient boosting accuracy:", round(gb.score(Xte, yte), 3))
+
+# Regression with boosting
+let houses = read_csv("examples/data/houses.csv")
+let hx = houses.select("area_sqft", "bedrooms", "age_years")
+let [a, b, c, d] = train_test_split(hx, houses["price_lakh"], test_size=0.25, seed=3)
+let reg = GradientBoosting(n_trees=80, lr=0.1, max_depth=3, task="regression", seed=2).fit(a, c)
+print("\nhouse price R2 (boosting):", round(reg.score(b, d), 3))

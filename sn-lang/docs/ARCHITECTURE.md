@@ -21,6 +21,7 @@ source text --Lexer--> tokens --Parser--> AST --Interpreter--> result
 | `sn/ml.py` | Models, scalers, metrics, splitting. Built only from `Tensor` operations. |
 | `sn/autograd.py` | Reverse-mode autodiff: `Var` nodes hold a value, their parents and a closure that maps the output gradient to input gradients; `backward()` walks the graph in reverse topological order. Optimizers `SGD` and `Adam`. |
 | `sn/trees.py` | CART decision trees (sorted sweep for the best split) and random forests (bootstrap + feature subsampling, out-of-bag score). |
+| `sn/models_more.py` | `PCA`, `NaiveBayes` and `GradientBoosting` (boosting reuses the tree builder from `trees.py`). |
 | `sn/plot.py` | SVG chart renderer (axes, nice ticks, legend, tooltips) behind the `Plot` object. |
 | `sn/stdlib.py` | The built-in function table (`BUILTINS`). |
 | `sn/cli.py` | `sn` command, REPL, error printing. Runs on a thread with a large stack so deep recursion is safe. |

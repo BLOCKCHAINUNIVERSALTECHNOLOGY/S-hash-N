@@ -8,7 +8,7 @@ import time as _time
 
 import functools
 
-from . import autograd as ag, ml, plot as _plot, stats, trees
+from . import autograd as ag, ml, models_more, plot as _plot, stats, trees
 from . import tensor as T
 from .dataframe import DataFrame, make_dataframe, read_csv
 from .errors import SNRuntimeError
@@ -17,7 +17,7 @@ from .tensor import RNG, Tensor
 from .objects import Class, Instance
 from .values import NativeFn, NativeObject, call_value, to_repr, to_str, truthy, type_name
 
-SN_VERSION = "1.2.1"
+SN_VERSION = "1.3.0"
 BUILTINS = {}
 _MISSING = object()
 
@@ -741,6 +741,9 @@ _register("KMeans", ml.KMeans)
 _register("NeuralNet", ml.NeuralNet)
 _register("DecisionTree", trees.DecisionTree)
 _register("RandomForest", trees.RandomForest)
+_register("GradientBoosting", models_more.GradientBoosting)
+_register("NaiveBayes", models_more.NaiveBayes)
+_register("PCA", models_more.PCA)
 _register("StandardScaler", ml.StandardScaler)
 _register("MinMaxScaler", ml.MinMaxScaler)
 _register("load_model", ml.load_model)

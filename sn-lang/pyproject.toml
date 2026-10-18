@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sn-lang"
-version = "1.2.1"
+version = "1.3.0"
 description = "S#N - a small, readable programming language for AI, ML and data work (English and Hindi keywords)"
 readme = "README.md"
 license = { text = "MIT" }

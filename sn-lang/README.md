@@ -32,7 +32,7 @@ print(f"R2 on unseen data: {model.score(X_test, y_test):.3f}")
 | **Language** | variables, functions, **classes with inheritance and operator methods**, **`match` pattern matching**, closures, lambdas, default and keyword arguments, lists, maps, comprehensions, conditional expressions, f-strings with format specs, `try`/`catch`/`throw`, modules (`import`), pipe operator `|>` |
 | **Tensors** | n-dimensional arrays with NumPy-style broadcasting, slicing, masks, `@` matrix multiply, reductions, `solve`/`inv`/`det` |
 | **Data** | `DataFrame` with CSV I/O, filter, sort, group-by, describe, missing-value handling, boolean masks |
-| **ML** | `LinearRegression`, `LogisticRegression`, `KNN`, `KMeans`, `NeuralNet` (mini-batch Adam/SGD), **`DecisionTree`, `RandomForest`**, `StandardScaler`, `MinMaxScaler`, metrics, `train_test_split`, model save/load |
+| **ML** | `LinearRegression`, `LogisticRegression`, `KNN`, `KMeans`, `NeuralNet` (mini-batch Adam/SGD), **`DecisionTree`, `RandomForest`, `GradientBoosting`, `NaiveBayes`, `PCA`**, `StandardScaler`, `MinMaxScaler`, metrics, `train_test_split`, model save/load |
 | **Autodiff** | **reverse-mode automatic differentiation**: `Var`, `backward()`, `autograd(f, x)`, `SGD` and `Adam` optimizers for training your own models |
 | **Charts** | line, scatter, bar, histogram and heatmap charts saved as standalone SVG or HTML files |
 | **Tooling** | `sn` command with REPL, `sn check`, readable errors with source line and call trace, VS Code syntax highlighting, 100+ tests |
@@ -66,7 +66,7 @@ Run the test suite: `cd tests && python3 -m unittest discover`
 
 1. Start with `examples/` - run them in order, they build on each other:
    `01_hello` -> `02_language_tour` -> `04_tensors` -> `05_data_pipeline` -> `06_linear_regression` -> `07_classification`
-   -> `12_classes` -> `13_plotting` -> `14_autograd` -> `15_trees_forest` -> `16_match`.
+   -> `12_classes` -> `13_plotting` -> `14_autograd` -> `15_trees_forest` -> `16_match` -> `17_more_models`.
 2. [`docs/LANGUAGE.md`](docs/LANGUAGE.md) - the language reference.
 3. [`docs/STDLIB.md`](docs/STDLIB.md) - every built-in function, tensor/data-frame method and model.
 4. [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) - how the interpreter is built (good for learning or extending it).
@@ -107,13 +107,13 @@ S#N is a complete, working language, but it is an **interpreter written in Pytho
 ### Roadmap ideas
 
 Compile to bytecode for speed -> storing tensors as NumPy arrays (not only accelerating a few kernels) -> optional type annotations ->
-more models (PCA, naive Bayes, gradient boosting) -> autograd for `max`/`min`/`concat` -> class patterns in `match` -> language server for editors.
+bytecode compiler for a further speed-up -> more models (SVM, t-SNE) -> autograd for `max`/`min`/`concat` -> class patterns in `match` -> language server for editors.
 
 ## Project layout
 
 ```
 sn/            interpreter and libraries (lexer, parser, interpreter, objects, tensor, dataframe, ml, plot, stdlib, cli)
-examples/      16 runnable programs + sample data (iris.csv, houses.csv)
+examples/      17 runnable programs + sample data (iris.csv, houses.csv)
 tests/         unit and end-to-end tests
 docs/          language reference, standard library, architecture
 editors/vscode syntax highlighting extension (copy the folder into ~/.vscode/extensions/)
