@@ -1,0 +1,77 @@
+# Classes: data and behaviour together
+
+class Account {
+    fn init(owner, balance = 0) {
+        self.owner = owner
+        self.balance = balance
+        self.history = []
+    }
+    fn deposit(amount) {
+        if amount <= 0 { throw "deposit must be positive" }
+        self.balance += amount
+        self.history.push(f"+{amount}")
+        return self
+    }
+    fn withdraw(amount) {
+        if amount > self.balance { throw f"insufficient funds: have {self.balance}, need {amount}" }
+        self.balance -= amount
+        self.history.push(f"-{amount}")
+        return self
+    }
+    fn str() { return f"{self.owner}: Rs {self.balance}" }
+}
+
+class Savings extends Account {
+    fn init(owner, balance = 0, rate = 0.04) {
+        super.init(owner, balance)
+        self.rate = rate
+    }
+    fn add_interest() { return self.deposit(round(self.balance * self.rate, 2)) }
+}
+
+let acc = Account("Asha", 1000)
+acc.deposit(500).withdraw(200)
+print(acc, acc.history)
+
+let sv = Savings("Ravi", 10000)
+sv.add_interest()
+print(sv, "| is Account?", is_a(sv, Account), "| type:", type(sv))
+
+try {
+    acc.withdraw(99999)
+} catch e {
+    print("error:", e)
+}
+
+# Operator methods: add, sub, mul, eq, lt, len, getitem ... make your own types feel built-in
+class Money {
+    fn init(paise) { self.paise = paise }
+    fn add(o) { return Money(self.paise + o.paise) }
+    fn mul(k) { return Money(round(self.paise * k)) }
+    fn eq(o) { return self.paise == o.paise }
+    fn lt(o) { return self.paise < o.paise }
+    fn str() { return f"Rs {self.paise / 100:.2f}" }
+}
+let price = Money(19950)
+print(price + Money(50), price * 3, price == Money(19950), Money(1) < price)
+
+# A class that wraps a model: a reusable ML pipeline
+class Classifier {
+    fn init(model) {
+        self.scaler = StandardScaler()
+        self.model = model
+    }
+    fn fit(X, y) {
+        self.model.fit(self.scaler.fit_transform(X), y)
+        return self
+    }
+    fn score(X, y) { return self.model.score(self.scaler.transform(X), y) }
+}
+
+let iris = read_csv("examples/data/iris.csv")
+let X = iris.select("sepal_length", "sepal_width", "petal_length", "petal_width").to_tensor()
+let [X_train, X_test, y_train, y_test] = train_test_split(X, iris["species"], seed=3)
+for model in [KNN(k=5), LogisticRegression(lr=0.3, epochs=300)] {
+    let pipe = Classifier(model).fit(X_train, y_train)
+    print(f"{model}: accuracy {pipe.score(X_test, y_test):.3f}")
+}

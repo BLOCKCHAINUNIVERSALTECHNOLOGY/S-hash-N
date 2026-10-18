@@ -1,0 +1,24 @@
+# Predict house prices with linear regression
+let houses = read_csv("examples/data/houses.csv")
+let X = houses.select("area_sqft", "bedrooms", "age_years").to_tensor()
+let y = houses["price_lakh"]
+
+let [X_train, X_test, y_train, y_test] = train_test_split(X, y, test_size=0.25, seed=42)
+
+# closed-form least squares (epochs=0 is the default)
+let model = LinearRegression()
+model.fit(X_train, y_train)
+print("weights:", model.weights, " bias:", model.bias)
+print("R2 on test data:", round(model.score(X_test, y_test), 3))
+print("RMSE:", round(rmse(y_test, model.predict(X_test)), 2), "lakh")
+
+# the same model trained by gradient descent on scaled features
+let scaler = StandardScaler()
+let Xs = scaler.fit_transform(X_train)
+let gd = LinearRegression(lr=0.1, epochs=500)
+gd.fit(Xs, y_train)
+print("gradient descent R2:", round(gd.score(scaler.transform(X_test), y_test), 3))
+
+# predict a new house: 1500 sqft, 3 bedrooms, 5 years old
+let price = model.predict([[1500, 3, 5]])
+print(f"predicted price: {price[0]:.1f} lakh")

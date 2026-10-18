@@ -1,0 +1,42 @@
+# Automatic differentiation: exact gradients, then training with them.
+
+# 1. Exact derivative of any function written with S#N operators
+let f = x => x ** 3 + 2 * x
+print("f'(2) exact     =", autograd(f, 2.0))
+print("f'(2) numerical =", round(grad(f, 2.0), 4))
+
+# 2. Gradients of a vector function
+let g = w => sum(exp(w) * w)
+print("grad =", autograd(g, [0.1, 0.2]))
+
+# 3. Var + backward(), like a tiny deep-learning framework
+let w = Var([1.0, -2.0])
+let loss = ((w * w).sum() + w[0] * w[1])
+loss.backward()
+print("loss =", loss.item(), " grad =", w.grad)
+
+# 4. Train a small neural net on XOR with Adam
+seed(1)
+let X = tensor([[0, 0], [0, 1], [1, 0], [1, 1]])
+let y = tensor([[0], [1], [1], [0]])
+let W1 = Var(randn(2, 8) * 0.8)
+let b1 = Var(zeros(8))
+let W2 = Var(randn(8, 1) * 0.8)
+let b2 = Var(zeros(1))
+let opt = Adam([W1, b1, W2, b2], lr=0.05)
+
+fn forward(x) {
+    let h = tanh(x @ W1 + b1)
+    return sigmoid(h @ W2 + b2)
+}
+
+for epoch in range(300) {
+    let pred = forward(X)
+    let loss = ((pred - y) ** 2).mean()
+    opt.zero_grad()
+    loss.backward()
+    opt.step()
+    if epoch % 100 == 0 { print(f"epoch {epoch}  loss {loss:.4f}") }
+}
+let out = forward(X).value
+print("predictions:", out.round(2).flatten())

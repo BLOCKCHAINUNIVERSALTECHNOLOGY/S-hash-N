@@ -1,0 +1,5 @@
+# A tiny module. Names starting with _ stay private.
+let _secret = 1
+
+fn circle_area(r) { return PI * r ** 2 }
+fn rect_area(w, h) { return w * h }

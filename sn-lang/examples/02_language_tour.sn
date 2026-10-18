@@ -1,0 +1,89 @@
+# A quick tour of the language
+
+# --- variables and basic types -------------------------------------------
+let n = 42
+let pi_ish = 3.14159
+let word = "S#N"
+let flag = true
+let nothing = nil
+print(type(n), type(pi_ish), type(word), type(flag), type(nothing))
+
+# --- functions, default and keyword arguments ------------------------------
+fn greet(who, greeting = "Hello") {
+    return f"{greeting}, {who}!"
+}
+print(greet("world"))
+print(greet("world", greeting = "Namaste"))
+
+# --- closures and lambdas -----------------------------------------------------
+fn make_counter() {
+    let count = 0
+    return fn() {
+        count += 1
+        return count
+    }
+}
+let counter = make_counter()
+counter(); counter()
+print("counter:", counter())
+
+let square = x => x * x
+let add = (a, b) => a + b
+print(square(7), add(2, 3))
+
+# --- lists, maps, comprehensions ------------------------------------------------
+let nums = [5, 3, 8, 1]
+nums.push(10)
+print(nums, len(nums), sorted(nums), nums[1:3], nums[-1])
+print([x * 2 for x in nums if x > 2])
+
+let person = {name: "Asha", age: 30, "skills": ["ml", "data"]}
+person.city = "Pune"
+print(person, person.keys())
+for key, value in items(person) {
+    print(f"  {key} -> {value}")
+}
+
+# --- control flow -------------------------------------------------------------
+for i in range(1, 16) {
+    if i % 15 == 0 { print("FizzBuzz") }
+    elif i % 3 == 0 { print("Fizz") }
+    elif i % 5 == 0 { print("Buzz") }
+    else { print(i) }
+}
+
+let total = 0
+let k = 0
+while true {
+    k += 1
+    if k > 100 { break }
+    if k % 2 == 1 { continue }
+    total += k
+}
+print("sum of even numbers up to 100:", total)
+
+# --- the pipe operator: data flows left to right --------------------------------
+let result = range(1, 11)
+    |> filter(x => x % 2 == 0)
+    |> map(x => x ** 2)
+    |> sum
+print("sum of squares of evens:", result)
+
+# --- errors ---------------------------------------------------------------------
+try {
+    let bad = 1 / 0
+} catch e {
+    print("caught error:", e)
+}
+
+try {
+    throw {code: 404, msg: "not found"}
+} catch e {
+    print("thrown value:", e.code, e.msg)
+}
+
+fn fib(n) {
+    if n < 2 { return n }
+    return fib(n - 1) + fib(n - 2)
+}
+print("fib(20) =", fib(20))

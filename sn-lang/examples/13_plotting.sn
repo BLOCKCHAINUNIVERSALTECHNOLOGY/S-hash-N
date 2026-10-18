@@ -1,0 +1,34 @@
+# Charts are written as SVG (or HTML) files you can open in any browser.
+make_dir("output")
+
+let iris = read_csv("examples/data/iris.csv")
+let houses = read_csv("examples/data/houses.csv")
+
+# 1. scatter plot: one series per species
+let fig = Plot(title="Iris petals", xlabel="petal length (cm)", ylabel="petal width (cm)")
+for sp in iris.unique("species") {
+    let part = iris.filter(r => r.species == sp)
+    fig.scatter(part["petal_length"], part["petal_width"], label=sp)
+}
+fig.save("output/iris_scatter.svg")
+
+# 2. bar chart of average price per city
+let by_city = houses.group_by("city", "mean")
+bar_chart(by_city.col("city"), by_city.col("price_lakh"),
+          title="Average price by city", ylabel="lakh").save("output/price_by_city.svg")
+
+# 3. histogram
+histogram(houses["price_lakh"], bins=12, title="Price distribution", xlabel="lakh").save("output/price_hist.svg")
+
+# 4. training curve of a neural network
+let X = iris.select("sepal_length", "sepal_width", "petal_length", "petal_width").to_tensor()
+let Xs = StandardScaler().fit_transform(X)
+let net = NeuralNet(layers=[4, 10, 3], lr=0.02, epochs=60, seed=1).fit(Xs, iris["species"])
+plot(net.history, title="Training loss", xlabel="epoch", ylabel="cross-entropy").save("output/loss.svg")
+
+# 5. confusion matrix heatmap
+let cm = confusion_matrix(iris["species"], net.predict(Xs))
+heatmap(cm.matrix, cm.labels, cm.labels, title="Confusion matrix", xlabel="predicted", ylabel="actual")
+    .save("output/confusion.html")
+
+print("wrote 5 charts to the output/ folder; open them in a browser")

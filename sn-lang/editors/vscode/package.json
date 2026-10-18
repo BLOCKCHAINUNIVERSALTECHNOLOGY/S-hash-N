@@ -1,0 +1,21 @@
+{
+  "name": "sn-language",
+  "displayName": "S#N Language",
+  "description": "Syntax highlighting for the S#N programming language",
+  "version": "1.0.0",
+  "engines": { "vscode": "^1.60.0" },
+  "categories": ["Programming Languages"],
+  "contributes": {
+    "languages": [{
+      "id": "sn",
+      "aliases": ["S#N", "sn"],
+      "extensions": [".sn"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "sn",
+      "scopeName": "source.sn",
+      "path": "./syntaxes/sn.tmLanguage.json"
+    }]
+  }
+}

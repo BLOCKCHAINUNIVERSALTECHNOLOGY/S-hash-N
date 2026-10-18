@@ -1,0 +1,7 @@
+# Splitting code across files with import
+import "lib/geometry.sn" as geo
+print("area of circle r=2:", round(geo.circle_area(2), 3))
+print("rectangle:", geo.rect_area(3, 4))
+
+import "lib/geometry.sn"          # without 'as', names are added directly
+print(circle_area(1) == PI)

@@ -1,0 +1,31 @@
+# Decision tree and random forest on the iris flowers
+let iris = read_csv("examples/data/iris.csv")
+let features = iris.select("sepal_length", "sepal_width", "petal_length", "petal_width")
+let species = iris["species"]
+
+let [Xtr, Xte, ytr, yte] = train_test_split(features, species, test_size=0.3, seed=7)
+
+# A single tree you can read
+let tree = DecisionTree(max_depth=3, seed=1).fit(Xtr, ytr)
+print("tree accuracy:", round(tree.score(Xte, yte), 3), " depth:", tree.depth, " leaves:", tree.n_leaves)
+print(tree.rules())
+
+# A forest of 60 trees
+let forest = RandomForest(n_trees=60, seed=1).fit(Xtr, ytr)
+print("\nforest accuracy:", round(forest.score(Xte, yte), 3))
+print("out-of-bag score:", round(forest.oob_score, 3))
+print("what matters most:")
+for [name, imp] in forest.importance_table() {
+    print(f"  {name:<14} {imp:.3f}")
+}
+
+# Regression: predict house prices
+let houses = read_csv("examples/data/houses.csv")
+let hx = houses.select("area_sqft", "bedrooms", "age_years")
+let hy = houses["price_lakh"]
+let [a, b, c, d] = train_test_split(hx, hy, test_size=0.25, seed=3)
+let reg = RandomForest(n_trees=40, task="regression", max_depth=6, seed=2).fit(a, c)
+print("\nhouse price R2 (forest):", round(reg.score(b, d), 3))
+make_dir("output")
+reg.save("output/forest.json")
+print("saved ->", "output/forest.json")

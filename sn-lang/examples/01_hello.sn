@@ -1,0 +1,9 @@
+# Hello, S#N!  Run with:  python -m sn examples/01_hello.sn
+print("Hello, S#N!")
+
+let name = "Duniya"
+print(f"Namaste, {name}!")
+
+# Keywords work in English or Hindi - you can even mix them.
+मान साल = 2026
+छापो(f"साल: {साल}")

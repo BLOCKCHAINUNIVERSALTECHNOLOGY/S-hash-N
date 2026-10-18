@@ -1,0 +1,12 @@
+# A neural network learns XOR - a problem no single linear layer can solve
+let X = [[0, 0], [0, 1], [1, 0], [1, 1]]
+let y = [0, 1, 1, 0]
+
+let net = NeuralNet(layers=[2, 6, 2], activation="tanh", lr=0.05,
+                    epochs=600, batch_size=4, seed=2)
+net.fit(X, y)
+
+print("loss at start:", round(net.history[0], 4), " at end:", round(net.history[-1], 4))
+print("predictions:", net.predict(X))
+print("probabilities:")
+print(net.predict_proba(X))

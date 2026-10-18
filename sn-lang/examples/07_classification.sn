@@ -1,0 +1,30 @@
+# Classify iris flowers with three different models
+let iris = read_csv("examples/data/iris.csv")
+let X = iris.select("sepal_length", "sepal_width", "petal_length", "petal_width").to_tensor()
+let y = iris["species"]
+print(iris.value_counts("species"))
+
+let [X_train, X_test, y_train, y_test] = train_test_split(X, y, test_size=0.2, seed=7)
+let scaler = StandardScaler()
+let Xs_train = scaler.fit_transform(X_train)
+let Xs_test = scaler.transform(X_test)
+
+let logreg = LogisticRegression(lr=0.3, epochs=400).fit(Xs_train, y_train)
+let knn = KNN(k=5).fit(Xs_train, y_train)
+let net = NeuralNet(layers=[4, 12, 3], activation="tanh", lr=0.02, epochs=120, seed=1)
+net.fit(Xs_train, y_train)
+
+for [name, model] in [["Logistic regression", logreg], ["k-NN (k=5)", knn], ["Neural network", net]] {
+    print(f"{name:<20} accuracy = {model.score(Xs_test, y_test):.3f}")
+}
+
+let pred = net.predict(Xs_test)
+let cm = confusion_matrix(y_test, pred)
+print("labels:", cm.labels)
+for row in cm.matrix { print(row) }
+print("macro F1:", round(f1_score(y_test, pred), 3))
+
+# save and reload a trained model
+logreg.save("/tmp/iris_model.json")
+let loaded = load_model("/tmp/iris_model.json")
+print("reloaded model accuracy:", round(loaded.score(Xs_test, y_test), 3))

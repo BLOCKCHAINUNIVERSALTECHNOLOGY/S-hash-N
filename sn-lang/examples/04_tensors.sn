@@ -1,0 +1,39 @@
+# Tensors: n-dimensional arrays with broadcasting
+let a = tensor([[1, 2, 3], [4, 5, 6]])
+let b = ones(2, 3) * 10
+
+print("a =", a)
+print("shape:", a.shape, " size:", a.size)
+print("a + b =", a + b)
+print("a * a =", a * a)
+print("a.T =", a.T)
+print("a @ a.T =", a @ a.T)
+
+# broadcasting a row over every row
+print("a + [100, 200, 300] =", a + [100, 200, 300])
+
+# reductions
+print("sum:", a.sum(), " mean:", a.mean(), " max:", a.max())
+print("column sums:", a.sum(axis=0), " row means:", a.mean(axis=1))
+
+# indexing, slicing, masks
+print("a[1, 2] =", a[1, 2], "  a[0] =", a[0], "  a[:, 1] =", a[:, 1])
+let v = tensor([3, -1, 4, -1, 5, -9])
+print("positives:", v[v > 0])
+v[v < 0] = 0
+print("after clamping:", v)
+
+# creation helpers
+print(arange(5), linspace(0, 1, 5))
+print(eye(3))
+print(reshape(arange(6), 2, 3))
+
+# linear algebra
+let A = tensor([[2, 1], [1, 3]])
+let rhs = tensor([3, 5])
+let x = solve(A, rhs)
+print("solve(A, b) =", x, "  check A @ x =", A @ x)
+print("inv(A) =", inv(A), " det(A) =", det(A))
+
+# element-wise math
+print(sigmoid(tensor([-2, 0, 2])), softmax(tensor([1, 2, 3])))

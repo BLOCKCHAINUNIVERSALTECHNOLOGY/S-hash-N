@@ -1,0 +1,22 @@
+# Loading, cleaning and summarising data with DataFrames
+let houses = read_csv("examples/data/houses.csv")
+print(houses.head(5))
+print("shape:", houses.shape, " columns:", houses.columns)
+
+# a pipeline of transformations
+let summary = houses
+    |> (df => df.filter(row => row.bedrooms >= 2))
+    |> (df => df.add_column("price_per_sqft", row => row.price_lakh * 100000 / row.area_sqft))
+    |> (df => df.sort_by("price_per_sqft", desc=true))
+print(summary.head(5))
+
+print("average price by city:")
+print(houses.group_by("city", "mean").select("city", "price_lakh"))
+
+print("city counts:", houses.value_counts("city"))
+print("correlation of area and price:", corr(houses["area_sqft"], houses["price_lakh"]))
+print(houses.describe())
+
+# boolean masks work like in NumPy / pandas
+let big = houses[houses["area_sqft"] > 2000]
+print("houses above 2000 sqft:", len(big))

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "S#N",
+  "scopeName": "source.sn",
+  "patterns": [
+    { "name": "comment.line.number-sign.sn", "match": "#.*$" },
+    { "name": "string.interpolated.sn", "begin": "f\"", "end": "\"",
+      "patterns": [
+        { "name": "constant.character.escape.sn", "match": "\\\\." },
+        { "name": "meta.embedded.expression.sn", "match": "\\{[^}]*\\}" }
+      ] },
+    { "name": "string.quoted.double.sn", "begin": "\"", "end": "\"",
+      "patterns": [{ "name": "constant.character.escape.sn", "match": "\\\\." }] },
+    { "name": "string.quoted.single.sn", "begin": "'", "end": "'",
+      "patterns": [{ "name": "constant.character.escape.sn", "match": "\\\\." }] },
+    { "name": "constant.numeric.sn", "match": "\\b\\d[\\d_]*(\\.\\d[\\d_]*)?([eE][+-]?\\d+)?\\b" },
+    { "name": "constant.language.sn", "match": "(?<![\\p{L}\\p{M}_])(true|false|nil|सच|झूठ|शून्य)(?![\\p{L}\\p{M}\\p{N}_])" },
+    { "name": "keyword.control.sn", "match": "(?<![\\p{L}\\p{M}_])(if|elif|else|while|for|in|return|break|continue|try|catch|throw|import|as|class|extends|match|अगर|वरना_अगर|वरना|जबतक|हर|में|लौटाओ|रोको|आगे|कोशिश|पकड़ो|फेंको|आयात|जैसे|वर्ग|विस्तार|मिलान)(?![\\p{L}\\p{M}\\p{N}_])" },
+    { "name": "keyword.operator.logical.sn", "match": "(?<![\\p{L}\\p{M}_])(and|or|not|और|या|नहीं)(?![\\p{L}\\p{M}\\p{N}_])" },
+    { "name": "storage.type.sn", "match": "(?<![\\p{L}\\p{M}_])(let|fn|मान|कार्य)(?![\\p{L}\\p{M}\\p{N}_])" },
+    { "name": "keyword.operator.sn", "match": "\\|>|=>|\\*\\*|//|==|!=|<=|>=|[-+*/%@<>=]" },
+    { "name": "entity.name.function.sn", "match": "[\\p{L}_][\\p{L}\\p{M}\\p{N}_]*(?=\\()" }
+  ]
+}
